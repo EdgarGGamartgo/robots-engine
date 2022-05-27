@@ -1,12 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Product } from './models';
+import { StoreMapService } from './services';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly storeMapService: StoreMapService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  async getHello(): Promise<Product[]> {
+    return await this.storeMapService.getAllProducts();
+  }
+
+  @Post()
+  async saveMultipleProducts(
+    @Body() { numberOfProducts }: { numberOfProducts: number },
+  ): Promise<Product[]> {
+    return await this.storeMapService.saveMultipleProducts(numberOfProducts);
   }
 }
