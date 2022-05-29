@@ -8,11 +8,25 @@ import {
   Query,
 } from '@nestjs/common';
 import { Product } from './models';
+import { Robot } from './models/robot.entity';
 import { StoreMapService } from './services';
 
 @Controller()
 export class AppController {
   constructor(private readonly storeMapService: StoreMapService) {}
+
+  @Get('/by-position')
+  async getAllProductsByPosition(
+    @Query('x') x: number,
+    @Query('y') y: number,
+  ): Promise<Product[]> {
+    return await this.storeMapService.getProductsByPosition(x, y);
+  }
+
+  @Get('/robots')
+  async getAllRobots(): Promise<Robot[]> {
+    return await this.storeMapService.getAllRobots();
+  }
 
   @Get()
   async getAllProducts(
@@ -37,6 +51,15 @@ export class AppController {
     data: number;
   }> {
     return await this.storeMapService.saveMultipleProducts(numberOfProducts);
+  }
+
+  @Post('/mutiple-robots')
+  async saveMultipleRobots(
+    @Body() { numberOfRobots }: { numberOfRobots: number },
+  ): Promise<{
+    data: number;
+  }> {
+    return await this.storeMapService.saveMultipleRobots(numberOfRobots);
   }
 
   @Post()
