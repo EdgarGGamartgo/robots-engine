@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Product } from './models';
 import { StoreMapService } from './services/store-map/store-map.service';
+import { StoreMapSocketModule } from './sockets/store-map.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { StoreMapService } from './services/store-map/store-map.service';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([Product]),
+    StoreMapSocketModule,
   ],
   controllers: [AppController],
   providers: [AppService, StoreMapService],

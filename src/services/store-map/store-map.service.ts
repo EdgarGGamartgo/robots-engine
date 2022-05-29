@@ -9,8 +9,10 @@ export class StoreMapService {
     @InjectRepository(Product) private productRepository: Repository<Product>,
   ) {}
 
-  async getAllProducts(): Promise<Product[]> {
-    return await this.productRepository.find();
+  async getAllProducts(take = 1): Promise<Product[]> {
+    return await this.productRepository.find({
+      take,
+    });
   }
 
   getRandomIntInclusive(min: number, max: number): number {
