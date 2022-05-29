@@ -28,4 +28,15 @@ export class StoreMapGateway {
     );
     this.server.emit('product-update', { data: newProduct });
   }
+
+  @SubscribeMessage('delete-product')
+  async deleteProduct(@MessageBody() id: string): Promise<void> {
+    const response = await this.storeMapService.deleteProduct(id);
+    if (response?.data) {
+      Logger.log(
+        `product-delete message has successfully been received. ID::${id}`,
+      );
+      this.server.emit('product-delete', { data: id });
+    }
+  }
 }

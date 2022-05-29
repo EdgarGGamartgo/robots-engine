@@ -9,10 +9,23 @@ export class StoreMapService {
     @InjectRepository(Product) private productRepository: Repository<Product>,
   ) {}
 
-  async getAllProducts(take = 1): Promise<Product[]> {
-    return await this.productRepository.find({
+  async getAllProducts(
+    take = 10000,
+    skip = 0,
+  ): Promise<{
+    data: Product[];
+    count: number;
+  }> {
+    const [result, total] = await this.productRepository.findAndCount({
+      order: { id: 'ASC' },
       take,
+      skip,
     });
+
+    return {
+      data: result,
+      count: total,
+    };
   }
 
   getRandomIntInclusive(min: number, max: number): number {
@@ -25,7 +38,15 @@ export class StoreMapService {
     return await this.productRepository.save(product);
   }
 
-  async saveMultipleProducts(numberOfProducts: number): Promise<Product[]> {
+  async deleteProduct(id: string): Promise<{ data: number }> {
+    return await this.productRepository.delete(id).then((r) => {
+      return { data: r.affected };
+    });
+  }
+
+  async saveMultipleProducts(numberOfProducts: number): Promise<{
+    data: number;
+  }> {
     let idx = 0;
     while (idx < numberOfProducts) {
       await this.saveProduct({
@@ -35,6 +56,6 @@ export class StoreMapService {
       idx++;
       Logger.log(`Product has been created. ID::${idx}`);
     }
-    return await this.getAllProducts();
+    return { data: numberOfProducts };
   }
 }
