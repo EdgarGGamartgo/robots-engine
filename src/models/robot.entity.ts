@@ -18,19 +18,19 @@ export class Robot {
   y: number;
 
   @Column()
-  name: string;
+  name?: string;
 
   @Column()
   orientation: string;
 
   @Column()
-  speed: number;
+  speed?: number;
 
   @Column()
-  dest_x: number;
+  dest_x?: number;
 
   @Column()
-  dest_y: number;
+  dest_y?: number;
 
   @CreateDateColumn()
   createdAt?: string;

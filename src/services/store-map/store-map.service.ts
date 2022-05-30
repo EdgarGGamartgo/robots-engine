@@ -37,8 +37,10 @@ export class StoreMapService {
     });
   }
 
-  async getAllRobots(): Promise<Robot[]> {
-    return await this.robotRepository.find();
+  async getAllRobots(numberOfRobots = 1): Promise<Robot[]> {
+    return await this.robotRepository.find({
+      take: numberOfRobots,
+    });
   }
 
   getRandomIntInclusive(min: number, max: number): number {
@@ -94,5 +96,17 @@ export class StoreMapService {
       Logger.log(`Robot has been created. ID::${id}`);
     }
     return { data: numberOfRobots };
+  }
+
+  async updateRobot(robot: Robot): Promise<Robot> {
+    if (robot?.id) {
+      const updatedRobot = await this.saveRobot(robot);
+      Logger.log(
+        `Robot has been updated. ID::${updatedRobot.id}. X::${updatedRobot.x}. Y::${updatedRobot.y}. Orientation::${updatedRobot.orientation}.`,
+      );
+      return updatedRobot;
+    }
+
+    return null;
   }
 }

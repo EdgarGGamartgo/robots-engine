@@ -24,8 +24,10 @@ export class AppController {
   }
 
   @Get('/robots')
-  async getAllRobots(): Promise<Robot[]> {
-    return await this.storeMapService.getAllRobots();
+  async getAllRobots(
+    @Query('numberOfRobots') numberOfRobots: number,
+  ): Promise<Robot[]> {
+    return await this.storeMapService.getAllRobots(numberOfRobots);
   }
 
   @Get()
